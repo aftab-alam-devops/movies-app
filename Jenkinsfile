@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_DIR = "/home/ubuntu/MERN-Movies-App"
+        DEPLOY_DIR = "/var/lib/jenkins/deploy"
     }
 
     stages {
@@ -37,23 +37,33 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+        
+        stage('Deploy') {
             steps {
                 sh '''
-                rm -rf $APP_DIR
-                mkdir -p $APP_DIR
-                cp -r * $APP_DIR
+                mkdir -p $DEPLOY_DIR
+                rm -rf $DEPLOY_DIR/*
+                cp -r * $DEPLOY_DIR/
                 '''
             }
         }
 
-        stage('Start App with a PM2') {
+        
+        stage('Start App with PM2') {
             steps {
                 sh '''
-                cd $APP_DIR/backend
+                cd $DEPLOY_DIR/backend
 
+                # install pm2 if not exists
+                npm install -g pm2 || true
+
+                # stop old app
                 pm2 delete movies-app || true
+
+                # start app
                 pm2 start index.js --name movies-app
+
+                pm2 save
                 '''
             }
         }
