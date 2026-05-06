@@ -40,9 +40,9 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sh '''
-                sudo rm -rf $APP_DIR
-                sudo mkdir -p $APP_DIR
-                sudo cp -r * $APP_DIR
+                rm -rf $APP_DIR
+                mkdir -p $APP_DIR
+                cp -r * $APP_DIR
                 '''
             }
         }
