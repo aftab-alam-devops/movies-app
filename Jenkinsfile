@@ -56,7 +56,7 @@ pipeline {
             }
         }
 
-        // START APP (clean + reliable)
+        // START APP (clean  and reliable)
         stage('Start App with PM2') {
             steps {
                 sh '''
